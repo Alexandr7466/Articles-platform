@@ -45,3 +45,4 @@ Want to keep up to date with all the latest news? This web-application Articles 
 11. By clicking on "Logout" button which is to the left of your nickname on your profile page, you are logging out of your curent account. 
 
 #ER-scheme:
+![ER Diagram](docs/ER-scheme-for-Articlesplatform.png)

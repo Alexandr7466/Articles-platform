@@ -1,0 +1,104 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Article</title>
+    <link rel="stylesheet" href="{% static 'cssshki/style1.css' %}">
+</head>
+<body>
+    <div style="width: 100%; background-color: #121212; display: flex; gap: 10px; flex-direction: column;">
+        <div style="width: 100%; justify-content: center; display: flex; align-items: center; gap: 10px; flex-direction: column;">
+            <a href="{% url "homepage" %}" style="text-decoration: none; color: #E0E0E0"> Back to all articles </a>
+            
+            <div style="width: 100%; background-color: #1E1E1E; display: flex; flex-direction: row;align-items: center; justify-content: center; gap: 40px; ">
+                <h1 style="color: #E0E0E0">{{ article.title }} - By {% if article.author.user == user %} <a href="{% url 'proffile:profile_page' %}" style="color: #E0E0E0;">{{ article.author.user.username }}</a> {% else %} <a href="{% url 'proffile:profile_page_of_someone' article.author.user.id %}" style="color: #E0E0E0;">{{ article.author.user.username }}</a> {% endif %}</h1>
+                
+                {% if article.author.user == user %}
+                    <a href="{% url 'articles:delete_article' article.id %}">
+                        <img id="trash_can_picture" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOzkW529T69E9gZgWCXExhUTFjjW_gWMiA1A&s" style="width: 40px; border-radius: 20%;">
+                    </a>
+                {% endif %}
+            </div>
+
+            {% if article.image %}
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" style="width: 100%; height: auto; ">
+            {% endif %}
+            
+            <div style="width: 100%; text-align: center">
+                <h2 style="color: #E0E0E0">{{ article.main_content }}</h2>
+            </div>
+
+            <div class="div_for_likes_and_views" style="width: 100%; display-flex; flex-direction: row; margin-top: 100px; color: #E0E0E0; margin-left: 20px;">
+                <img id="like_picture" src="https://media.istockphoto.com/id/1903985199/vector/heart-flat-icon.jpg?s=612x612&w=0&k=20&c=FOAQ1kofne38dLzm6C6vBE39nY9fynVBpQb7UcDW7gk=" style="width: 4%; border-radius: 50%;">
+                <span id="likes" >{{ article.likes.count }}</span>
+                <img src="https://thumbs.dreamstime.com/b/eye-icon-isolated-pictogram-number-views-element-design-app-chat-messenger-website-eye-icon-isolated-pictogram-number-119582730.jpg" style="width: 4%; border-radius: 50%;">
+                <span id="views" >{{ article.views.count }}</span>
+            </div>
+        <div style="width: 100%;  background-color: #1E1E1E; color: #E0E0E0; display: flex; flex-direction: column; align-items: center">
+            <h2>Comments</h2>
+            
+            {% if user.is_authenticated %}
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div style="display: flex; flex-direction: row; margin-left: -66%;">
+                        {{ form.content_of_comment }}
+
+                        <button type="submit" style="border-radius: 15px;">Leave a comment</button>
+                    </div>
+                </form>
+            {% endif %}
+
+            {% for comment in comments %}
+                <div style="width: 95%; ">
+                    {% if comment.user != user %}
+                        <a href="{% url 'proffile:profile_page_of_someone' comment.user.id %}" style="color: #E0E0E0; text-decoration: none;">
+                            <div style="display: flex; flex-direction: row; align-items: center;">
+                                <div style="width: 20px; height: 20px; border-radius: 50%; background-color: white"></div>
+                                <p style="margin-left: 5px;"><strong>{{ comment.user.username }}</strong> - {{ comment.created_at }}</p>
+                            </div>
+                        </a>    
+                    {% else %}
+                        <a href="{% url 'proffile:profile_page' %}" style="color: #E0E0E0; text-decoration: none;">
+                            <div style="display: flex; flex-direction: row; align-items: center;">
+                                <div style="width: 20px; height: 20px; border-radius: 50%; background-color: white"></div>
+                                <p style="margin-left: 5px;"><strong>{{ comment.user.username }}</strong> - {{ comment.created_at }}</p>
+                            </div>
+                        </a>    
+                    {% endif %}
+                    <p style="margin-left: 20px; color: #E0E0E0">{{ comment.content_of_comment }}</p> <br>
+                    <hr style="height: 1px; border-color: #121212">
+                </div>
+            {% empty %}
+                {% if user.is_authenticated %}
+                    <p style="color: #E0E0E0">No comments yet. Be the first to comment!</p>
+                {% else %}
+                    <p style="color: #E0E0E0">No comments yet. <a href="{% url 'proffile:log_in' %}" style="color: #ffd755;">Log in</a> and be the first to comment!</p>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <script>
+        let like_picture = document.getElementById("like_picture")
+        like_picture.addEventListener('click', () => {
+            fetch("/articles/like/{{ article.id }}/")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("likes").innerText = data.count
+            })
+        })
+
+        
+
+        let views = document.getElementById("views")
+        fetch("/articles/view/{{ article.id }}/")
+            .then(response => response.json())
+            .then(data => {
+                views.innerText = data.count_views
+            })
+    </script>
+</body>
+</html>

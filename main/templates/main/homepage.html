@@ -1,0 +1,48 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles Platform</title>
+</head>
+<body style="background-color: #121212; color: #ffffff;">
+    <div id = 'header_div' style="width: 100%; height: 75px; background-color: #1E1E1E; text-align: center; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; gap: 10px; flex-direction: row;">
+        <a href="{% url 'proffile:profile_page' %}" style="text-decoration: none; color: inherit;">
+            <div id="profile_picture_and_nickname" style="display: flex; align-items: center; gap: 10px; flex-direction: row; margin-left: 20px;"> 
+                    <div style="height: 50px; width: 50px; border-radius: 50%; background-color: #f2f2f2; border_width: 2px solid #000;"> </div>               
+                <h3>{% if user.is_authenticated %}{{ user.username }}{% else %}Guest{% endif %}</h3>
+            </div>
+        </a>
+        
+        <h1 style="margin-left: 25%">Articles Platform</h1> 
+        
+        <a href="{% url 'proffile:menu' %}" style="margin-left: 35%">
+            <img src="https://img.icons8.com/ios11/512/FFFFFF/menu--v2.png" style="height: 45px; width: 45px; border-radius: 50%;">
+        </a>
+    </div> 
+    <h3>All Articles</h3>
+    <div style="width: 100%; display: flex; align-items: center; gap: 10px; flex-direction: row; flex-wrap: wrap;">
+        {% for article in articles %}
+            <a href="{% url 'articles:article_detail' article.id %}" style="text-decoration: none">
+                <div class="article_div" style="width: 300px; background-color: #1f1f1f; border-radius: 10px;  flex-direction: column; display: flex; align-items: center; color: black; text-decoration: none;">
+                    {% if article.image %}
+                        <img src="{{ article.image.url }}" alt="{{ article.title }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                    
+                    {% else %}
+                        <div style="width: 100%; height: 200px; background-color: white; border-radius: 10px 10px 0 0; text-align: center;">
+                            <p>{{ article.main_content }}</p>
+                        </div>
+
+                    {% endif %}
+                    <div style="width: 100%; background-color: #1E1E1E; color: #e0e0e0; border-radius: 0 0 10px 10px; display: flex; justify-content: center;">
+                        <h4>{{ article.title|truncatechars:35 }}</h4>
+                    </div>
+                    
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 class Time (models.Model):
     time_of_publication = models.DateTimeField(auto_now_add=True)
-    latest_update = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('time_of_publication',)
@@ -31,9 +30,7 @@ class Article(models.Model):
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     time = models.ForeignKey(Time, on_delete=models.CASCADE) 
     is_published = models.BooleanField(default=False)
-    # number_of_views = models.IntegerField(default=0)
     views = models.ManyToManyField(User, related_name='viewed_articles')
-    # number_of_likes = models.IntegerField(default=0)
     likes = models.ManyToManyField(User, related_name='liked_articles', blank=True)
 
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='articles')

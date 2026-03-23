@@ -23,6 +23,14 @@ Want to keep up to date with all the latest news? This web-application Articles 
 6. Run the server:
    python manage.py runserver
 
+# Tech Stack
+- Python
+- Django
+- SQLite
+- HTML
+- CSS
+- Django templates
+
 #Now on the website:
 1. Click on your nickname to view your profile. 
 2. If you have not registered yet, click on yellow text "logged in" to either log in or register. 
@@ -36,4 +44,4 @@ Want to keep up to date with all the latest news? This web-application Articles 
 10. Use "Go back", "Back to all articles" and "Return to main page" buttons to go to the main page or profile.
 11. By clicking on "Logout" button which is to the left of your nickname on your profile page, you are logging out of your curent account. 
 
-
+#ER-scheme:

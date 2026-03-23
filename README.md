@@ -18,11 +18,9 @@ Want to keep up to date with all the latest news? This web-application Articles 
    python -m venv venv
 4. Activate it:
    venv\Scripts\activate
-5. Install dependencies:
-   pip install -r requirements.txt
-6. Apply migrations:
+5. Apply migrations:
    python manage.py migrate
-7. Run the server:
+6. Run the server:
    python manage.py runserver
 
 #Now on the website:
